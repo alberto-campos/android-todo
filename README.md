@@ -1,2 +1,3 @@
-# android-todo
-To Do Application
+CodePath To Do List
+
+Simple To Do App
