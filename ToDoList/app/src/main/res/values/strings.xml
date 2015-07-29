@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">ToDoList</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="txtSubmit">Add</string>
+    <string name="strItems">strItems</string>
+    <string name="txtEnterText">Enter an item to add</string>
+    <string name="title_activity_edit_item">EditItemActivity</string>
+    <string name="strSave">Save</string>
+    <string name="strCancel">Cancel</string>
+</resources>
