@@ -1,14 +1,21 @@
 package com.codepath.todolist;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -90,20 +97,24 @@ public class ToDoList extends ActionBarActivity {
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
             String updatedItem = data.getExtras().getString("item");
 
-            todoItems.remove(curPos);
-            todoItems.add(curPos, updatedItem);
-            todoAdapter.notifyDataSetChanged();
-            writeItems();
+            if (updatedItem.toString().length() > 0) {
+                todoItems.remove(curPos);
+                todoItems.add(curPos, updatedItem);
+                todoAdapter.notifyDataSetChanged();
+                writeItems();
+                Toast.makeText(this, "Edited: " + updatedItem + ".", Toast.LENGTH_SHORT).show();
+            }
 
-            Toast.makeText(this, "Edited: " + updatedItem + ".", Toast.LENGTH_SHORT).show();
+            else {
+                // String came back empty
+                Toast.makeText(this, "Nothing to update", Toast.LENGTH_SHORT).show();
+            }
         }
         else
         {
-            Toast.makeText(this, "Nothing to update.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "User canceled.", Toast.LENGTH_LONG).show();
         }
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -130,12 +141,15 @@ public class ToDoList extends ActionBarActivity {
     public void onSubmit(View view) {
 
         String itemText = etNewItem.getText().toString();
-        todoAdapter.add(itemText);
-        etNewItem.setText("");
-        writeItems();
 
-        // Toast to display item added
-        Toast.makeText(this, itemText + " added successfully.", Toast.LENGTH_SHORT).show();
+        if (itemText.toString().length() > 0 ) {
+            todoAdapter.add(itemText);
+            etNewItem.setText("");
+            writeItems();
+            // Toast to display item added
+            Toast.makeText(this, itemText + " added successfully.", Toast.LENGTH_SHORT).show();
+        }
+        Toast.makeText(this, "Please enter a task.", Toast.LENGTH_SHORT).show();
     }
 
     private  void readItems() {
@@ -159,7 +173,30 @@ public class ToDoList extends ActionBarActivity {
         {
             e.printStackTrace();
         }
+    }
+
+    public void onAddDueDate(View view) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        LayoutInflater inflater = (LayoutInflater)getApplicationContext().getSystemService
+                (Context.LAYOUT_INFLATER_SERVICE);
+        FrameLayout ll= (FrameLayout)inflater.inflate(R.layout.calendar_dialog, null, false);
 
 
+        builder.setTitle("Set a due date");
+        builder.setView(ll);
+        builder.setMessage("When is this task due?");
+        final EditText inputField = new EditText(this);
+        // builder.setView(inputField);
+        builder.setPositiveButton("Set", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Log.d("ToDoList due now on: ", inputField.getText().toString());
+            }
+        });
+
+        builder.setNegativeButton("Cancel", null);
+        builder.create().show();
     }
 }
