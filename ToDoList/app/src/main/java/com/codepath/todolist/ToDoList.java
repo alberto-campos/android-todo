@@ -4,16 +4,20 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ListView;
@@ -26,6 +30,8 @@ import java.io.File;
 import java.io.File.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class ToDoList extends ActionBarActivity {
 
@@ -175,28 +181,21 @@ public class ToDoList extends ActionBarActivity {
         }
     }
 
-    public void onAddDueDate(View view) {
+    public void onAddDueDate(final View view) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Select priority")
+                .setItems(R.array.priority_array, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
 
-        LayoutInflater inflater = (LayoutInflater)getApplicationContext().getSystemService
-                (Context.LAYOUT_INFLATER_SERVICE);
-        FrameLayout ll= (FrameLayout)inflater.inflate(R.layout.calendar_dialog, null, false);
+                        Resources res = getResources();
+                        String[] priorities = res.getStringArray(R.array.priority_array);
 
+                        Toast.makeText(getApplicationContext(), "This task should get done "+ priorities[which].toLowerCase() + ".", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
-        builder.setTitle("Set a due date");
-        builder.setView(ll);
-        builder.setMessage("When is this task due?");
-        final EditText inputField = new EditText(this);
-        // builder.setView(inputField);
-        builder.setPositiveButton("Set", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Log.d("ToDoList due now on: ", inputField.getText().toString());
-            }
-        });
-
-        builder.setNegativeButton("Cancel", null);
         builder.create().show();
+
     }
 }
