@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
  */
 public class TodoItemDatabase extends SQLiteOpenHelper {
     // Database Version
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 4;
     // Database Name
     private static final String DATABASE_NAME = "ItemsDB";
 
@@ -136,6 +137,27 @@ public class TodoItemDatabase extends SQLiteOpenHelper {
         return item;
     }
 
+
+    public ArrayList<String> getAllItemsArray() {
+
+        ArrayList<String> todoItems = new ArrayList<String>();
+
+        int i = getMaxItems();  // Is this needed when DB is empty?
+        if (i > 0 ) {
+            String query = "SELECT name FROM " + TABLE_ITEMS;
+
+            SQLiteDatabase db = this.getWritableDatabase();
+            Cursor cursor = db.rawQuery(query, null);
+
+            if (cursor.moveToFirst()) {
+                do {
+                    todoItems.add(cursor.getString(0));
+                } while (cursor.moveToNext());
+            }
+        }
+        return todoItems;
+    }
+
     // Get All Items
     public List<Item> getAllItems() {
         List<Item> items = new LinkedList<Item>();
@@ -195,9 +217,7 @@ public class TodoItemDatabase extends SQLiteOpenHelper {
 //                    new String[]{String.valueOf(item.getName())});
 //        }
         db.close();
-
         return i;
-
     }
 
     // Deleting single item

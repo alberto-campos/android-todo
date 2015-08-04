@@ -11,7 +11,7 @@ public class Item {
     private int due;
     private int category;
 
-    private int DEFAULT_TIMESTAMP  = 111; // 1420070400;
+    private int DEFAULT_TIMESTAMP  = 1420070400; // 1420070400;
     private int DEFAULT_STATUS = 1;
     private int DEFAULT_CATEGORY = 1;
 

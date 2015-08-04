@@ -179,10 +179,7 @@ public class ToDoList extends ActionBarActivity {
             Toast.makeText(this, "No tasks found. Add new tasks.", Toast.LENGTH_SHORT).show();
         }
 
-        for (int i = 1; (i <= maxItems); i++) {
-            todoItems.add(db.getItem(i).getName());
-
-        }
+       todoItems = db.getAllItemsArray();
     }
 
     private void updateDBItems(Item itemName) {
