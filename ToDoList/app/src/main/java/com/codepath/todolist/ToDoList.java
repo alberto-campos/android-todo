@@ -20,11 +20,13 @@ import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.apache.commons.io.FileUtils;
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.File.*;
@@ -98,10 +100,32 @@ public class ToDoList extends ActionBarActivity {
 
             // fill the view
             TextView myTask = (TextView) itemView.findViewById(R.id.item_tvDescription);
+            TextView myDue = (TextView) itemView.findViewById(R.id.item_tvDue);
+            ImageView myStatus = (ImageView) itemView.findViewById(R.id.item_ivStatus);
+            myStatus.setImageResource(currentItem.getStatus());
+
+
+
             myTask.setText(currentItem.getName());
+            myDue.setText(getDueText(currentItem.getDue()));
 
             return itemView;
         }
+    }
+
+    private String getDueText(int id){
+        String value = "";
+        switch (id) {
+            case 0: value = "Now";
+                break;
+            case 1: value = "Tomorrow";
+                break;
+            case 2: value = "Later";
+                break;
+            default: value = "Eventually";
+                break;
+        }
+     return value;
     }
 
     private void setupListViewListener() {
@@ -114,7 +138,6 @@ public class ToDoList extends ActionBarActivity {
 
                 todoItems.remove(pos);
                 todoAdapter.notifyDataSetChanged();
-                // writeItems();
                 return true;
             }
         });
