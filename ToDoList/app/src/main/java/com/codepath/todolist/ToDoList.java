@@ -102,9 +102,13 @@ public class ToDoList extends ActionBarActivity {
             TextView myTask = (TextView) itemView.findViewById(R.id.item_tvDescription);
             TextView myDue = (TextView) itemView.findViewById(R.id.item_tvDue);
             ImageView myStatus = (ImageView) itemView.findViewById(R.id.item_ivStatus);
-            myStatus.setImageResource(currentItem.getStatus());
 
-
+            if (currentItem.getStatus() == 1){
+                myStatus.setImageResource(R.drawable.abc_btn_check_to_on_mtrl_015);
+            }
+            else {
+                myStatus.setImageResource(R.drawable.abc_btn_check_to_on_mtrl_000);
+            }
 
             myTask.setText(currentItem.getName());
             myDue.setText(getDueText(currentItem.getDue()));
@@ -126,6 +130,12 @@ public class ToDoList extends ActionBarActivity {
                 break;
         }
      return value;
+    }
+
+    private int getStatusImage(int imgId) {
+
+
+        return 1;
     }
 
     private void setupListViewListener() {
