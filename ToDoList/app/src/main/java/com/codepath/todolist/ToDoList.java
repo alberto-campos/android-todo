@@ -29,6 +29,7 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.File.*;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -42,11 +43,13 @@ public class ToDoList extends ActionBarActivity {
 
     private EditText etItem; // empty
     private TextView tvLabel; // empty
+    private List<Item> myItems = new ArrayList<Item>();
+
     private ArrayList<String> todoItems;
     private ArrayAdapter<String> todoAdapter;
+
     private ListView lvItems;
     private EditText etNewItem;
-
 
     private final int REQUEST_CODE = 1934;
     private int curPos;
@@ -58,17 +61,47 @@ public class ToDoList extends ActionBarActivity {
 
         etNewItem = (EditText) findViewById(R.id.etItem);
         lvItems = (ListView) findViewById(R.id.lvItems);
-      //  readItems();
+
         readDBItems();
 
-        todoAdapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, todoItems);
-        lvItems.setAdapter(todoAdapter);
+
+        // Populate List View
+        ArrayAdapter<Item> myAdapter = new MyListAdapter();
+        ListView list = (ListView) findViewById(R.id.lvItems);
+        list.setAdapter(myAdapter);
+
+      //  todoAdapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, todoItems);
+       // lvItems.setAdapter(todoAdapter);
+
         setupListViewListener();
 
         // Get values from Edit Text
         etItem = (EditText) findViewById(R.id.etItem);
         tvLabel = (TextView) findViewById(R.id.tvLabel);
+    }
 
+    private class MyListAdapter extends ArrayAdapter<Item> {
+        public MyListAdapter() {
+            super(ToDoList.this, R.layout.item_view, myItems);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View itemView = convertView;
+
+            if (itemView == null){
+                itemView = getLayoutInflater().inflate(R.layout.item_view, parent, false);
+            }
+
+            // find the item
+            Item currentItem = myItems.get(position);
+
+            // fill the view
+            TextView myTask = (TextView) itemView.findViewById(R.id.item_tvDescription);
+            myTask.setText(currentItem.getName());
+
+            return itemView;
+        }
     }
 
     private void setupListViewListener() {
@@ -81,7 +114,7 @@ public class ToDoList extends ActionBarActivity {
 
                 todoItems.remove(pos);
                 todoAdapter.notifyDataSetChanged();
-               // writeItems();
+                // writeItems();
                 return true;
             }
         });
@@ -173,13 +206,17 @@ public class ToDoList extends ActionBarActivity {
     private void readDBItems() {
         TodoItemDatabase db = new TodoItemDatabase(this);
         int maxItems = db.getMaxItems();
+
+        //TODO: REMOVE todoITems
         todoItems = new ArrayList<String>();
 
         if (maxItems == 0 ) {
             Toast.makeText(this, "No tasks found. Add new tasks.", Toast.LENGTH_SHORT).show();
         }
-
-       todoItems = db.getAllItemsArray();
+        else {
+            myItems = db.getItemsList();
+            todoItems = db.getAllItemsArray();
+        }
     }
 
     private void updateDBItems(Item itemName) {
@@ -213,29 +250,6 @@ public class ToDoList extends ActionBarActivity {
         TodoItemDatabase db = new TodoItemDatabase(this);
         return db.getItemId(name);
     }
-
-//    private  void readItems() {
-//
-//        File fileDir = getFilesDir();
-//        File todoFile = new File (fileDir, "todoItems.txt");
-//        try {
-//            todoItems = new ArrayList<String>(FileUtils.readLines(todoFile));
-//        } catch (IOException e) {
-//            todoItems = new ArrayList<String>();
-//        }
-//
-//    }
-//
-//    private void writeItems() {
-//        File filesDir = getFilesDir();
-//        File todoFile = new File(filesDir, "todoItems.txt");
-//        try {
-//            FileUtils.writeLines(todoFile, todoItems);
-//        } catch (IOException e)
-//        {
-//            e.printStackTrace();
-//        }
-//    }
 
     public void onAddDueDate(final View view) {
 

@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class TodoItemDatabase extends SQLiteOpenHelper {
     // Database Version
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
     // Database Name
     private static final String DATABASE_NAME = "ItemsDB";
 
@@ -137,6 +137,30 @@ public class TodoItemDatabase extends SQLiteOpenHelper {
         return item;
     }
 
+//    public List<Item> getItemsList() {
+//
+//        List<Item> todoItems = new ArrayList<Item>();
+//
+//        int i = getMaxItems();  // Is this needed when DB is empty?
+//        if (i > 0 ) {
+//            String query = "SELECT name, status, category FROM " + TABLE_ITEMS;
+//
+//            SQLiteDatabase db = this.getWritableDatabase();
+//            Cursor cursor = db.rawQuery(query, null);
+//
+//            if (cursor.moveToFirst()) {
+//                do {
+//                    Item myItem = new Item();
+//                    myItem.setName(cursor.getString(0));
+//                    myItem.setStatus(cursor.getInt(1));
+//                    myItem.setCategory(cursor.getInt(2));
+//                    todoItems.add(myItem);
+//                } while (cursor.moveToNext());
+//            }
+//        }
+//        return todoItems;
+//    }
+
 
     public ArrayList<String> getAllItemsArray() {
 
@@ -157,6 +181,29 @@ public class TodoItemDatabase extends SQLiteOpenHelper {
         }
         return todoItems;
     }
+
+    public List<Item> getItemsList() {
+
+        List<Item> todoItems = new ArrayList<Item>();
+
+        int i = getMaxItems();  // Is this needed when DB is empty?
+        if (i > 0 ) {
+            String query = "SELECT name FROM " + TABLE_ITEMS;
+
+            SQLiteDatabase db = this.getWritableDatabase();
+            Cursor cursor = db.rawQuery(query, null);
+
+            if (cursor.moveToFirst()) {
+                do {
+                    Item myItem = new Item();
+                    myItem.setName(cursor.getString(0));
+                    todoItems.add(myItem);
+                } while (cursor.moveToNext());
+            }
+        }
+        return todoItems;
+    }
+
 
     // Get All Items
     public List<Item> getAllItems() {

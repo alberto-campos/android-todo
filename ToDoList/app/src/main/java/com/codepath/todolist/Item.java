@@ -69,4 +69,15 @@ public class Item {
     public void setCategory(int cat) {this.category = cat; }
 
     public int getCategory() {return this.category; }
+
+//    public Item getItem() {
+//        Item myItem = new Item();
+//        myItem.setId(this.id);
+//        myItem.setName(this.name);
+//        myItem.setCategory(this.category);
+//        myItem.setId(this.id);
+//        myItem.setDue(this.due);
+//        myItem.setStatus(this.status);
+//        return myItem;
+//    }
 }

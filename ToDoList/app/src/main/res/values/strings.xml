@@ -10,4 +10,6 @@
     <string name="strSave">Save</string>
     <string name="strCancel">Cancel</string>
     <string name="strDue">Due</string>
+    <string name="strTodoDescription">Description</string>
+    <string name="strStatus">Active</string>
 </resources>
