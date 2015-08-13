@@ -11,9 +11,9 @@ public class Item {
     private int due;
     private int category;
 
-    private int DEFAULT_TIMESTAMP  = 1; // 1420070400;
-    private int DEFAULT_STATUS = 1;
-    private int DEFAULT_CATEGORY = 1;
+    public static final int DEFAULT_TIMESTAMP  = 1; // 1420070400;
+    private static int DEFAULT_STATUS = 1;
+    private static int DEFAULT_CATEGORY = 1;
 
     public Item () {}
 
@@ -25,6 +25,14 @@ public class Item {
         this.category = DEFAULT_CATEGORY;
     }
 
+    public Item (String name, int du) {
+        super();
+        this.name = name;
+        this.status = DEFAULT_STATUS;
+        this.due = du;
+        this.category = DEFAULT_CATEGORY;
+    }
+
     public Item (String name, int status, int due, int cat) {
         super();
        // this.id = id;
@@ -32,6 +40,10 @@ public class Item {
         this.status = status;
         this.due = due;
         this.category = cat;
+    }
+
+    public int getDEFAULT_TIMESTAMP() {
+        return DEFAULT_TIMESTAMP;
     }
 
     public int getId() {

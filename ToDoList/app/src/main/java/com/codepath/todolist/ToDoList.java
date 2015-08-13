@@ -53,7 +53,7 @@ public class ToDoList extends ActionBarActivity {
 
     private final int REQUEST_CODE = 1934;
     private int curPos;
-
+    private int currentDue = Item.DEFAULT_TIMESTAMP;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +63,6 @@ public class ToDoList extends ActionBarActivity {
         lvItems = (ListView) findViewById(R.id.lvItems);
 
         readDBItems();
-
 
         myAdapter = new MyListAdapter();
 
@@ -94,6 +93,8 @@ public class ToDoList extends ActionBarActivity {
             // find the item
             Item currentItem = myItems.get(position);
 
+            currentItem = getItem(position);
+
             // fill the view
             TextView myTask = (TextView) itemView.findViewById(R.id.item_tvDescription);
             TextView myDue = (TextView) itemView.findViewById(R.id.item_tvDue);
@@ -107,25 +108,10 @@ public class ToDoList extends ActionBarActivity {
             }
 
             myTask.setText(currentItem.getName());
-            myDue.setText(getDueText(currentItem.getDue()));
+            myDue.setText(getValueFromArray(currentItem.getDue()));
 
             return itemView;
         }
-    }
-
-    private String getDueText(int ts){
-        String value = "";
-        switch (ts) {
-            case 1: value = "Now";
-                break;
-            case 2: value = "Tomorrow";
-                break;
-            case 3: value = "Later";
-                break;
-            default: value = "Eventually";
-                break;
-        }
-     return value;
     }
 
     private int getStatusImage(int imgId) {
@@ -139,13 +125,10 @@ public class ToDoList extends ActionBarActivity {
                 Item itName = new Item();
 
                 itName.setName(myItems.get(pos).getName());
-//                itName.setName(todoItems.get(pos).toString());
 
                 removeDBItem(itName);
                 myItems.remove(pos);
-//                todoItems.remove(pos);
                 myAdapter.notifyDataSetChanged();
-//                todoAdapter.notifyDataSetChanged();
                 return true;
             }
         });
@@ -155,7 +138,6 @@ public class ToDoList extends ActionBarActivity {
             public void onItemClick(AdapterView<?> adapter, View item, int pos, long id) {
                 curPos = pos;
                 launchEditView(myItems.get(pos).getName());
-               // launchEditView(todoItems.get(pos).toString());
             }
         });
     }
@@ -179,7 +161,8 @@ public class ToDoList extends ActionBarActivity {
                 myItems.add(curPos, thisName);
 
                 myAdapter.notifyDataSetChanged();
-                Toast.makeText(this, "Edited: " + updatedItem + ".", Toast.LENGTH_SHORT).show();
+                // Remove temporarily. Intrusive.
+               // Toast.makeText(this, "Edited: " + updatedItem + ".", Toast.LENGTH_SHORT).show();
             }
 
             else {
@@ -219,16 +202,18 @@ public class ToDoList extends ActionBarActivity {
 
         String itemText = etNewItem.getText().toString();
 
-        if (itemText.toString().length() > 0 ) {
+        if (itemText.length() > 0 ) {
             etNewItem.setText("");
-            Item itName = new Item(itemText);
+            Item itName = new Item(itemText, currentDue);
             myAdapter.add(itName);
             writeDBItems(itName);
 
-            // Toast to display item added
-            Toast.makeText(this, itemText + " added successfully.", Toast.LENGTH_SHORT).show();
+            // Toast to display item added. Removing temporarily. It's a little intrusive.
+           // Toast.makeText(this, itemText + " added successfully.", Toast.LENGTH_SHORT).show();
         }
-        Toast.makeText(this, "Please enter a task.", Toast.LENGTH_SHORT).show();
+        else {
+            Toast.makeText(this, "Please enter a task.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void readDBItems() {
@@ -242,11 +227,6 @@ public class ToDoList extends ActionBarActivity {
             myItems = db.getItemsList();
         }
     }
-
-//    private void updateDBItems(Item itemName) {
-//        TodoItemDatabase db = new TodoItemDatabase(this);
-//        db.updateItem(itemName);
-//    }
 
     private void writeDBItems(Item itemName) {
         TodoItemDatabase db = new TodoItemDatabase(this);
@@ -284,6 +264,7 @@ public class ToDoList extends ActionBarActivity {
 
                         Resources res = getResources();
                         String[] priorities = res.getStringArray(R.array.priority_array);
+                        currentDue = which;
 
                         Toast.makeText(getApplicationContext(), "This task should get done "+ priorities[which].toLowerCase() + ".", Toast.LENGTH_SHORT).show();
                     }
@@ -292,4 +273,14 @@ public class ToDoList extends ActionBarActivity {
         builder.create().show();
 
     }
+
+
+    private String getValueFromArray (int index) {
+        Resources res = getResources();
+        String[] priorities = res.getStringArray(R.array.priority_array);
+        return priorities[index];
+    }
+
+
+
 }

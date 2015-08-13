@@ -144,7 +144,7 @@ public class TodoItemDatabase extends SQLiteOpenHelper {
 
         int i = getMaxItems();  // Is this needed when DB is empty?
         if (i > 0 ) {
-            String query = "SELECT name, status, due FROM " + TABLE_ITEMS;
+            String query = "SELECT name, status, due, category FROM " + TABLE_ITEMS;
 
             SQLiteDatabase db = this.getWritableDatabase();
             Cursor cursor = db.rawQuery(query, null);
@@ -153,8 +153,9 @@ public class TodoItemDatabase extends SQLiteOpenHelper {
                 do {
                     Item myItem = new Item();
                     myItem.setName(cursor.getString(0));
-                    myItem.setDue(cursor.getInt(1));
-                    myItem.setStatus(cursor.getInt(2));
+                    myItem.setStatus(cursor.getInt(1));
+                    myItem.setDue(cursor.getInt(2));
+                    myItem.setCategory(cursor.getInt(3));
                     todoItems.add(myItem);
                 } while (cursor.moveToNext());
             }
