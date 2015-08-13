@@ -96,7 +96,7 @@ public class ToDoList extends ActionBarActivity {
             // find the item
             Item currentItem = myItems.get(position);
 
-            currentItem = getItem(position);
+           // currentItem = getItem(position);
 
             // fill the view
             final TextView myTask = (TextView) itemView.findViewById(R.id.item_tvDescription);
