@@ -48,8 +48,8 @@ public class ToDoList extends ActionBarActivity {
     private List<Item> myItems = new ArrayList<Item>();
     private ArrayAdapter<Item> myAdapter;
 
-    private ArrayList<String> todoItems;
-    private ArrayAdapter<String> todoAdapter;
+   // private ArrayList<String> todoItems;
+   // private ArrayAdapter<String> todoAdapter;
 
     private ListView lvItems;
     private EditText etNewItem;
@@ -143,11 +143,15 @@ public class ToDoList extends ActionBarActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapter, View item, int pos, long id) {
                 Item itName = new Item();
-                itName.setName(todoItems.get(pos).toString());
-                removeDBItem(itName);
 
-                todoItems.remove(pos);
-                todoAdapter.notifyDataSetChanged();
+                itName.setName(myItems.get(pos).getName());
+//                itName.setName(todoItems.get(pos).toString());
+
+                removeDBItem(itName);
+                myItems.remove(pos);
+//                todoItems.remove(pos);
+                myAdapter.notifyDataSetChanged();
+//                todoAdapter.notifyDataSetChanged();
                 return true;
             }
         });
@@ -156,7 +160,8 @@ public class ToDoList extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> adapter, View item, int pos, long id) {
                 curPos = pos;
-                launchEditView(todoItems.get(pos).toString());
+                launchEditView(myItems.get(pos).getName());
+               // launchEditView(todoItems.get(pos).toString());
             }
         });
     }
@@ -174,15 +179,19 @@ public class ToDoList extends ActionBarActivity {
             String updatedItem = data.getExtras().getString("item");
 
             if (updatedItem.toString().length() > 0) {
-                Item itName = getDBItem(getDBItemId(todoItems.get(curPos)));
+               // Item itName = getDBItem(getDBItemId(todoItems.get(curPos)));
+                Item itName = getDBItem(getDBItemId(myItems.get(curPos).getName()));
 
                 itName.setName(updatedItem);
-                updateDBItems(itName);
+            //    updateDBItems(itName);
 
-                todoItems.remove(curPos);
-                todoItems.add(curPos, updatedItem);
-                todoAdapter.notifyDataSetChanged();
-               // writeItems();
+               // todoItems.remove(curPos);
+                //todoItems.add(curPos, updatedItem);
+                myItems.remove(curPos);
+                myItems.add(curPos, itName);
+
+                myAdapter.notifyDataSetChanged();
+//                todoAdapter.notifyDataSetChanged();
                 Toast.makeText(this, "Edited: " + updatedItem + ".", Toast.LENGTH_SHORT).show();
             }
 
@@ -224,9 +233,6 @@ public class ToDoList extends ActionBarActivity {
         String itemText = etNewItem.getText().toString();
 
         if (itemText.toString().length() > 0 ) {
-           // todoAdapter.add(itemText);
-
-
             etNewItem.setText("");
             Item itName = new Item(itemText);
             myAdapter.add(itName);
@@ -243,14 +249,14 @@ public class ToDoList extends ActionBarActivity {
         int maxItems = db.getMaxItems();
 
         //TODO: REMOVE todoITems
-        todoItems = new ArrayList<String>();
+       // todoItems = new ArrayList<String>();
 
         if (maxItems == 0 ) {
             Toast.makeText(this, "No tasks found. Add new tasks.", Toast.LENGTH_SHORT).show();
         }
         else {
             myItems = db.getItemsList();
-            todoItems = db.getAllItemsArray();
+            //todoItems = db.getAllItemsArray();
         }
     }
 

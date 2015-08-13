@@ -62,7 +62,6 @@ public class EditItemActivity extends ActionBarActivity {
 
         db.updateItem(itName);
         db.close();
-
         // pass data back
         data.putExtra("item", myItem);
         setResult(RESULT_OK, data);

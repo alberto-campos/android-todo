@@ -200,6 +200,8 @@ public class TodoItemDatabase extends SQLiteOpenHelper {
                     todoItems.add(myItem);
                 } while (cursor.moveToNext());
             }
+
+            db.close();
         }
         return todoItems;
     }
@@ -233,6 +235,7 @@ public class TodoItemDatabase extends SQLiteOpenHelper {
         }
 
         Log.d("getAllItems()", items.toString());
+        db.close();
 
         // return items
         return items;
@@ -274,17 +277,17 @@ public class TodoItemDatabase extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         // 2.1 Delete by ID
-        if (item.getId() > 0) {
-            db.delete(TABLE_ITEMS,
-                    KEY_ID + " = ?",
-                    new String[]{String.valueOf(item.getId())});
-        }
-        else {
+//        if (item.getId() > 0) {
+//            db.delete(TABLE_ITEMS,
+//                    KEY_ID + " = ?",
+//                    new String[]{String.valueOf(item.getId())});
+//        }
+//        else {
             // 2.2 delete by Name
             db.delete(TABLE_ITEMS,
                     KEY_NAME + " = ?",
                     new String[]{String.valueOf(item.getName())});
-        }
+ //       }
 
         db.close();
        // Log.d("deleteItem", item.toString());
