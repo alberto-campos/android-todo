@@ -228,6 +228,33 @@ public class TodoItemDatabase extends SQLiteOpenHelper {
         return i;
     }
 
+
+    public void flipStatus(String name, int status) {
+        // 1. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // 2. create ContentValues to add key "column"/value
+        ContentValues values = new ContentValues();
+
+        if (status == 1) {
+            status = 0;
+        }
+        else
+        {
+            status = 1;
+        }
+
+        values.put("status", status); // flip status
+        //values.put("name", name); // update item name
+
+        db.update(TABLE_ITEMS, //table
+                values, // column/value
+                KEY_NAME + " = ?", // selections
+                new String[]{String.valueOf(name)}); //selection args
+        db.close();
+
+    }
+
     // Deleting single item
     public void deleteItem(Item item) {
 
@@ -242,9 +269,9 @@ public class TodoItemDatabase extends SQLiteOpenHelper {
 //        }
 //        else {
             // 2.2 delete by Name
-            db.delete(TABLE_ITEMS,
-                    KEY_NAME + " = ?",
-                    new String[]{String.valueOf(item.getName())});
+        db.delete(TABLE_ITEMS,
+                KEY_NAME + " = ?",
+                new String[]{String.valueOf(item.getName())});
  //       }
 
         db.close();
