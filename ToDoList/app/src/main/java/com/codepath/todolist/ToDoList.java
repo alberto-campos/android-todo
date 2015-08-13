@@ -48,9 +48,6 @@ public class ToDoList extends ActionBarActivity {
     private List<Item> myItems = new ArrayList<Item>();
     private ArrayAdapter<Item> myAdapter;
 
-   // private ArrayList<String> todoItems;
-   // private ArrayAdapter<String> todoAdapter;
-
     private ListView lvItems;
     private EditText etNewItem;
 
@@ -73,9 +70,6 @@ public class ToDoList extends ActionBarActivity {
         // Populate List View
         ListView list = (ListView) findViewById(R.id.lvItems);
         list.setAdapter(myAdapter);
-
-      //  todoAdapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, todoItems);
-       // lvItems.setAdapter(todoAdapter);
 
         setupListViewListener();
 
@@ -178,20 +172,13 @@ public class ToDoList extends ActionBarActivity {
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
             String updatedItem = data.getExtras().getString("item");
 
-            if (updatedItem.toString().length() > 0) {
-               // Item itName = getDBItem(getDBItemId(todoItems.get(curPos)));
-                Item itName = getDBItem(getDBItemId(myItems.get(curPos).getName()));
+            if (updatedItem.length() > 0) {
+                Item thisName = getDBItem(getDBItemId(updatedItem));
 
-                itName.setName(updatedItem);
-            //    updateDBItems(itName);
-
-               // todoItems.remove(curPos);
-                //todoItems.add(curPos, updatedItem);
                 myItems.remove(curPos);
-                myItems.add(curPos, itName);
+                myItems.add(curPos, thisName);
 
                 myAdapter.notifyDataSetChanged();
-//                todoAdapter.notifyDataSetChanged();
                 Toast.makeText(this, "Edited: " + updatedItem + ".", Toast.LENGTH_SHORT).show();
             }
 
