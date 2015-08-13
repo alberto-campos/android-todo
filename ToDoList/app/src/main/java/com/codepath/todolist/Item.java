@@ -11,7 +11,7 @@ public class Item {
     private int due;
     private int category;
 
-    private int DEFAULT_TIMESTAMP  = 1420070400; // 1420070400;
+    private int DEFAULT_TIMESTAMP  = 1; // 1420070400;
     private int DEFAULT_STATUS = 1;
     private int DEFAULT_CATEGORY = 1;
 
@@ -70,14 +70,4 @@ public class Item {
 
     public int getCategory() {return this.category; }
 
-//    public Item getItem() {
-//        Item myItem = new Item();
-//        myItem.setId(this.id);
-//        myItem.setName(this.name);
-//        myItem.setCategory(this.category);
-//        myItem.setId(this.id);
-//        myItem.setDue(this.due);
-//        myItem.setStatus(this.status);
-//        return myItem;
-//    }
 }

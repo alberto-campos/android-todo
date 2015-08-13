@@ -113,14 +113,14 @@ public class ToDoList extends ActionBarActivity {
         }
     }
 
-    private String getDueText(int id){
+    private String getDueText(int ts){
         String value = "";
-        switch (id) {
-            case 0: value = "Now";
+        switch (ts) {
+            case 1: value = "Now";
                 break;
-            case 1: value = "Tomorrow";
+            case 2: value = "Tomorrow";
                 break;
-            case 2: value = "Later";
+            case 3: value = "Later";
                 break;
             default: value = "Eventually";
                 break;
@@ -235,22 +235,18 @@ public class ToDoList extends ActionBarActivity {
         TodoItemDatabase db = new TodoItemDatabase(this);
         int maxItems = db.getMaxItems();
 
-        //TODO: REMOVE todoITems
-       // todoItems = new ArrayList<String>();
-
         if (maxItems == 0 ) {
             Toast.makeText(this, "No tasks found. Add new tasks.", Toast.LENGTH_SHORT).show();
         }
         else {
             myItems = db.getItemsList();
-            //todoItems = db.getAllItemsArray();
         }
     }
 
-    private void updateDBItems(Item itemName) {
-        TodoItemDatabase db = new TodoItemDatabase(this);
-        db.updateItem(itemName);
-    }
+//    private void updateDBItems(Item itemName) {
+//        TodoItemDatabase db = new TodoItemDatabase(this);
+//        db.updateItem(itemName);
+//    }
 
     private void writeDBItems(Item itemName) {
         TodoItemDatabase db = new TodoItemDatabase(this);

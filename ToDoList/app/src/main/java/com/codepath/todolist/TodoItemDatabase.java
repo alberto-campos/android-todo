@@ -137,50 +137,6 @@ public class TodoItemDatabase extends SQLiteOpenHelper {
         return item;
     }
 
-//    public List<Item> getItemsList() {
-//
-//        List<Item> todoItems = new ArrayList<Item>();
-//
-//        int i = getMaxItems();  // Is this needed when DB is empty?
-//        if (i > 0 ) {
-//            String query = "SELECT name, status, category FROM " + TABLE_ITEMS;
-//
-//            SQLiteDatabase db = this.getWritableDatabase();
-//            Cursor cursor = db.rawQuery(query, null);
-//
-//            if (cursor.moveToFirst()) {
-//                do {
-//                    Item myItem = new Item();
-//                    myItem.setName(cursor.getString(0));
-//                    myItem.setStatus(cursor.getInt(1));
-//                    myItem.setCategory(cursor.getInt(2));
-//                    todoItems.add(myItem);
-//                } while (cursor.moveToNext());
-//            }
-//        }
-//        return todoItems;
-//    }
-
-
-    public ArrayList<String> getAllItemsArray() {
-
-        ArrayList<String> todoItems = new ArrayList<String>();
-
-        int i = getMaxItems();  // Is this needed when DB is empty?
-        if (i > 0 ) {
-            String query = "SELECT name FROM " + TABLE_ITEMS;
-
-            SQLiteDatabase db = this.getWritableDatabase();
-            Cursor cursor = db.rawQuery(query, null);
-
-            if (cursor.moveToFirst()) {
-                do {
-                    todoItems.add(cursor.getString(0));
-                } while (cursor.moveToNext());
-            }
-        }
-        return todoItems;
-    }
 
     public List<Item> getItemsList() {
 
@@ -188,7 +144,7 @@ public class TodoItemDatabase extends SQLiteOpenHelper {
 
         int i = getMaxItems();  // Is this needed when DB is empty?
         if (i > 0 ) {
-            String query = "SELECT name FROM " + TABLE_ITEMS;
+            String query = "SELECT name, status, due FROM " + TABLE_ITEMS;
 
             SQLiteDatabase db = this.getWritableDatabase();
             Cursor cursor = db.rawQuery(query, null);
@@ -197,6 +153,8 @@ public class TodoItemDatabase extends SQLiteOpenHelper {
                 do {
                     Item myItem = new Item();
                     myItem.setName(cursor.getString(0));
+                    myItem.setDue(cursor.getInt(1));
+                    myItem.setStatus(cursor.getInt(2));
                     todoItems.add(myItem);
                 } while (cursor.moveToNext());
             }
@@ -237,7 +195,6 @@ public class TodoItemDatabase extends SQLiteOpenHelper {
         Log.d("getAllItems()", items.toString());
         db.close();
 
-        // return items
         return items;
     }
 
@@ -290,8 +247,6 @@ public class TodoItemDatabase extends SQLiteOpenHelper {
  //       }
 
         db.close();
-       // Log.d("deleteItem", item.toString());
-
     }
 
     public int getMaxItems () {
