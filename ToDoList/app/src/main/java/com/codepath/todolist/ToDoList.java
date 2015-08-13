@@ -46,6 +46,7 @@ public class ToDoList extends ActionBarActivity {
     private EditText etItem; // empty
     private TextView tvLabel; // empty
     private List<Item> myItems = new ArrayList<Item>();
+    private ArrayAdapter<Item> myAdapter;
 
     private ArrayList<String> todoItems;
     private ArrayAdapter<String> todoAdapter;
@@ -67,8 +68,9 @@ public class ToDoList extends ActionBarActivity {
         readDBItems();
 
 
+        myAdapter = new MyListAdapter();
+
         // Populate List View
-        ArrayAdapter<Item> myAdapter = new MyListAdapter();
         ListView list = (ListView) findViewById(R.id.lvItems);
         list.setAdapter(myAdapter);
 
@@ -103,7 +105,7 @@ public class ToDoList extends ActionBarActivity {
             TextView myDue = (TextView) itemView.findViewById(R.id.item_tvDue);
             ImageView myStatus = (ImageView) itemView.findViewById(R.id.item_ivStatus);
 
-            if (currentItem.getStatus() == 1){
+            if (currentItem.getStatus() == 0){
                 myStatus.setImageResource(R.drawable.abc_btn_check_to_on_mtrl_015);
             }
             else {
@@ -133,9 +135,7 @@ public class ToDoList extends ActionBarActivity {
     }
 
     private int getStatusImage(int imgId) {
-
-
-        return 1;
+        return imgId;
     }
 
     private void setupListViewListener() {
@@ -224,10 +224,12 @@ public class ToDoList extends ActionBarActivity {
         String itemText = etNewItem.getText().toString();
 
         if (itemText.toString().length() > 0 ) {
-            todoAdapter.add(itemText);
+           // todoAdapter.add(itemText);
+
+
             etNewItem.setText("");
-           // writeItems();
             Item itName = new Item(itemText);
+            myAdapter.add(itName);
             writeDBItems(itName);
 
             // Toast to display item added
