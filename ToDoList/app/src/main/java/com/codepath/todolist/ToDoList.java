@@ -86,6 +86,9 @@ public class ToDoList extends ActionBarActivity {
         public View getView(int position, View convertView, ViewGroup parent) {
             View itemView = convertView;
 
+
+            final int pos = position;
+
             if (itemView == null){
                 itemView = getLayoutInflater().inflate(R.layout.item_view, parent, false);
             }
@@ -96,9 +99,17 @@ public class ToDoList extends ActionBarActivity {
             currentItem = getItem(position);
 
             // fill the view
-            TextView myTask = (TextView) itemView.findViewById(R.id.item_tvDescription);
+             TextView myTask = (TextView) itemView.findViewById(R.id.item_tvDescription);
             TextView myDue = (TextView) itemView.findViewById(R.id.item_tvDue);
-            ImageView myStatus = (ImageView) itemView.findViewById(R.id.item_ivStatus);
+             ImageView myStatus = (ImageView) itemView.findViewById(R.id.item_ivStatus);
+
+           myStatus.setOnClickListener(new ImageView.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                   String s = "Clicked item ";
+                   Toast.makeText(ToDoList.this, "Edited: "+ s + pos+1, Toast.LENGTH_SHORT).show();
+               }
+           } );
 
             if (currentItem.getStatus() == 0){
                 myStatus.setImageResource(R.drawable.abc_btn_check_to_on_mtrl_015);
@@ -274,7 +285,6 @@ public class ToDoList extends ActionBarActivity {
 
     }
 
-
     private String getValueFromArray (int index) {
         Resources res = getResources();
         String[] priorities = res.getStringArray(R.array.priority_array);
@@ -282,5 +292,10 @@ public class ToDoList extends ActionBarActivity {
     }
 
 
+    public void onImgClick(View view) {
+        Toast.makeText(getApplicationContext(), "You clicked!", Toast.LENGTH_SHORT).show();
+
+
+    }
 
 }
