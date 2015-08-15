@@ -104,7 +104,7 @@ public class ToDoList extends ActionBarActivity {
             final ImageView myStatus = (ImageView) itemView.findViewById(R.id.item_ivStatus);
 
             final Item finalCurrentItem = currentItem;
-            final boolean[] flipped = {((finalCurrentItem.getStatus() == 0) ? true : false)};
+          //  final boolean[] flipped = {((finalCurrentItem.getStatus() == 0) ? true : false)};
 
 
             myStatus.setOnClickListener(new ImageView.OnClickListener() {
@@ -112,12 +112,14 @@ public class ToDoList extends ActionBarActivity {
                public void onClick(View v) {
                    String s;
                    s = finalCurrentItem.getName();
+                   int st = finalCurrentItem.getStatus();
                    Toast.makeText(ToDoList.this, "Editing: "+ s, Toast.LENGTH_SHORT).show();
-                   flipDBStatus(s, finalCurrentItem.getStatus());
+                   flipDBStatus(s, st);
 
-                   flipped[0] = (!flipped[0]);
+                  // flipped[0] = (!flipped[0]);
+                  // if (flipped[0]){
 
-                   if (flipped[0]){
+                   if (st == 1){
                        myStatus.setImageResource(R.drawable.abc_btn_check_to_on_mtrl_015);
                    }
                    else {

@@ -16,8 +16,8 @@ import java.util.List;
  */
 public class TodoItemDatabase extends SQLiteOpenHelper {
     // Database Version
-    private static final int DATABASE_VERSION = 5;
-    // Database Name
+    private static final int DATABASE_VERSION = 6;
+    // Database NameDue
     private static final String DATABASE_NAME = "ItemsDB";
 
     public TodoItemDatabase(Context context) {
