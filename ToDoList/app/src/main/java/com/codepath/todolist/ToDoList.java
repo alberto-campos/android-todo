@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -102,34 +103,44 @@ public class ToDoList extends ActionBarActivity {
 
             // fill the view
             final TextView myTask = (TextView) itemView.findViewById(R.id.item_tvDescription);
-            TextView myDue = (TextView) itemView.findViewById(R.id.item_tvDue);
+            final TextView myDue = (TextView) itemView.findViewById(R.id.item_tvDue);
             final ImageView myStatus = (ImageView) itemView.findViewById(R.id.item_ivStatus);
+
+            final String s = currentItem.getName();
 
             final Item finalCurrentItem = currentItem;
 
             myStatus.setOnClickListener(new ImageView.OnClickListener() {
                @Override
                public void onClick(View v) {
-                   String s;
-                   s = finalCurrentItem.getName();
+                   // String s;
+                  // s = finalCurrentItem.getName();
                    int st = finalCurrentItem.getStatus();
-                   Toast.makeText(ToDoList.this, "Editing: "+ s, Toast.LENGTH_SHORT).show();
+                  // Toast.makeText(ToDoList.this, "Editing: "+ s, Toast.LENGTH_SHORT).show();
                    flipDBStatus(s, st);
 
                    if (st == 1){ // Task was changed to done, set it to inactive
                        myStatus.setImageResource(R.drawable.abc_btn_check_to_on_mtrl_015);
+                       myTask.setPaintFlags(myTask.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                       myDue.setPaintFlags(myDue.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                    }
                    else {
                        myStatus.setImageResource(R.drawable.abc_btn_check_to_on_mtrl_000);
+                       myTask.setPaintFlags(myTask.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+                       myDue.setPaintFlags(myDue.getPaintFlags() & ~ Paint.STRIKE_THRU_TEXT_FLAG);
                    }
                }
            } );
 
             if (currentItem.getStatus() == 0){  // Task IS done, show it as such.
                 myStatus.setImageResource(R.drawable.abc_btn_check_to_on_mtrl_015);
+                myTask.setPaintFlags(myTask.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                myDue.setPaintFlags(myDue.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             }
             else {
                 myStatus.setImageResource(R.drawable.abc_btn_check_to_on_mtrl_000);
+                myTask.setPaintFlags(myTask.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+                myDue.setPaintFlags(myDue.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
             }
 
             myTask.setText(currentItem.getName());
@@ -184,7 +195,6 @@ public class ToDoList extends ActionBarActivity {
                 // Remove temporarily. Intrusive.
                // Toast.makeText(this, "Edited: " + updatedItem + ".", Toast.LENGTH_SHORT).show();
             }
-
             else {
                 // String came back empty
                 Toast.makeText(this, "Nothing to update", Toast.LENGTH_SHORT).show();
