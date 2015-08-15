@@ -82,35 +82,27 @@ public class ToDoList extends ActionBarActivity {
             }
 
             // find the item
-            Item currentItem; // = myItems.get(position);
+            Item currentItem;
             currentItem = getItem(position);
-           // curStatus = currentItem.getStatus();
             curName = currentItem.getName();
 
             // fill the view
             final TextView myTask = (TextView) itemView.findViewById(R.id.item_tvDescription);
             final TextView myDue = (TextView) itemView.findViewById(R.id.item_tvDue);
             final ImageView myStatus = (ImageView) itemView.findViewById(R.id.item_ivStatus);
-
-            //final String s = currentItem.getName();
             final Item finalCurrentItem = currentItem;
 
             myStatus.setOnClickListener(new ImageView.OnClickListener() {
                @Override
                public void onClick(View v) {
-                   String s;
-                   s = finalCurrentItem.getName();
-                //   int st = finalCurrentItem.getStatus();
-                 //  curStatus = 1;
 
-                   curName = s;
-                //   curStatus = st;
+                   curName = finalCurrentItem.getName();
 
                    curStatus = getDBItemStatus(curName);
                  //  Toast.makeText(ToDoList.this, "Editing: "+ curStatus, Toast.LENGTH_SHORT).show();
                    flipDBStatus(curName, curStatus);
 
-                   if (curStatus == 1){ // Task was inverted to done, set it to inactive
+                   if (curStatus == 1){ // Task was flipped to done, set it to inactive
                        myStatus.setImageResource(R.drawable.abc_btn_check_to_on_mtrl_015);
                        myTask.setPaintFlags(myTask.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                        myDue.setPaintFlags(myDue.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
