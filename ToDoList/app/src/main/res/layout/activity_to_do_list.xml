@@ -48,5 +48,6 @@
         android:id="@+id/btnDue"
         android:onClick="onAddDueDate"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:textSize="10dp" />
 </RelativeLayout>

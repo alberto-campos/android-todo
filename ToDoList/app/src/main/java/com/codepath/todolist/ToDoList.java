@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -50,6 +51,7 @@ public class ToDoList extends ActionBarActivity {
 
     private ListView lvItems;
     private EditText etNewItem;
+    private Button dueBtn;
 
     private final int REQUEST_CODE = 1934;
     private int curPos;
@@ -61,6 +63,7 @@ public class ToDoList extends ActionBarActivity {
 
         etNewItem = (EditText) findViewById(R.id.etItem);
         lvItems = (ListView) findViewById(R.id.lvItems);
+        dueBtn = (Button) findViewById(R.id.btnDue);
 
         readDBItems();
 
@@ -95,7 +98,6 @@ public class ToDoList extends ActionBarActivity {
 
             // find the item
             Item currentItem = myItems.get(position);
-
            // currentItem = getItem(position);
 
             // fill the view
@@ -104,8 +106,6 @@ public class ToDoList extends ActionBarActivity {
             final ImageView myStatus = (ImageView) itemView.findViewById(R.id.item_ivStatus);
 
             final Item finalCurrentItem = currentItem;
-          //  final boolean[] flipped = {((finalCurrentItem.getStatus() == 0) ? true : false)};
-
 
             myStatus.setOnClickListener(new ImageView.OnClickListener() {
                @Override
@@ -116,21 +116,16 @@ public class ToDoList extends ActionBarActivity {
                    Toast.makeText(ToDoList.this, "Editing: "+ s, Toast.LENGTH_SHORT).show();
                    flipDBStatus(s, st);
 
-                  // flipped[0] = (!flipped[0]);
-                  // if (flipped[0]){
-
-                   if (st == 1){
+                   if (st == 1){ // Task was changed to done, set it to inactive
                        myStatus.setImageResource(R.drawable.abc_btn_check_to_on_mtrl_015);
                    }
                    else {
                        myStatus.setImageResource(R.drawable.abc_btn_check_to_on_mtrl_000);
                    }
-
-
                }
            } );
 
-            if (currentItem.getStatus() == 0){
+            if (currentItem.getStatus() == 0){  // Task IS done, show it as such.
                 myStatus.setImageResource(R.drawable.abc_btn_check_to_on_mtrl_015);
             }
             else {
@@ -139,13 +134,8 @@ public class ToDoList extends ActionBarActivity {
 
             myTask.setText(currentItem.getName());
             myDue.setText(getValueFromArray(currentItem.getDue()));
-
             return itemView;
         }
-    }
-
-    private int getStatusImage(int imgId) {
-        return imgId;
     }
 
     private void setupListViewListener() {
@@ -303,12 +293,12 @@ public class ToDoList extends ActionBarActivity {
                         String[] priorities = res.getStringArray(R.array.priority_array);
                         currentDue = which;
 
-                        Toast.makeText(getApplicationContext(), "This task should get done "+ priorities[which].toLowerCase() + ".", Toast.LENGTH_SHORT).show();
+                        dueBtn.setText(priorities[which]);
+                        //Toast.makeText(getApplicationContext(), "This task should get done "+ priorities[which].toLowerCase() + ".", Toast.LENGTH_SHORT).show();
                     }
                 });
 
         builder.create().show();
-
     }
 
     private String getValueFromArray (int index) {
