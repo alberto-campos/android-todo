@@ -14,7 +14,7 @@ import java.util.List;
 public class TodoItemDatabase extends SQLiteOpenHelper {
     // Database Version
     private static final int DATABASE_VERSION = 6;
-    // Database NameDue
+    // Database Name
     private static final String DATABASE_NAME = "ItemsDB";
 
     public TodoItemDatabase(Context context) {
@@ -166,7 +166,7 @@ public class TodoItemDatabase extends SQLiteOpenHelper {
 
         int i = getMaxItems();  // Is this needed when DB is empty?
         if (i > 0 ) {
-            String query = "SELECT name, status, due, category FROM " + TABLE_ITEMS;
+            String query = "SELECT name, status, due, category FROM " + TABLE_ITEMS + " ORDER BY due";
 
             SQLiteDatabase db = this.getWritableDatabase();
             Cursor cursor = db.rawQuery(query, null);
@@ -234,20 +234,12 @@ public class TodoItemDatabase extends SQLiteOpenHelper {
             ContentValues values = new ContentValues();
             values.put("status", item.getStatus()); // reset status to ACTIVE
             values.put("name", item.getName()); // update item name
-            // 3.1 update by ID
-            // if (item.getId() > 0) {
+
             i = db.update(TABLE_ITEMS, //table
                     values, // column/value
                     KEY_ID + " = ?", // selections
                     new String[]{String.valueOf(item.getId())}); //selection args
-//        }
-//        else // 3.2 Update by name
-//        {
-//            i = db.update(TABLE_ITEMS,
-//                    values,
-//                    KEY_NAME + " = ?",
-//                    new String[]{String.valueOf(item.getName())});
-//        }
+
             i = 1;
             db.close();
         }
@@ -294,7 +286,7 @@ public class TodoItemDatabase extends SQLiteOpenHelper {
 
     public int getMaxItems () {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor mCount= db.rawQuery("select count(*) from " + TABLE_ITEMS + " where " + KEY_STATUS + " > 0"
+        Cursor mCount= db.rawQuery("select count(*) from " + TABLE_ITEMS + " where " + KEY_ID + " > 0"
          +" ", null);
         mCount.moveToFirst();
         int count= mCount.getInt(0);
@@ -302,6 +294,4 @@ public class TodoItemDatabase extends SQLiteOpenHelper {
 
         return count;
     }
-
-
 }
