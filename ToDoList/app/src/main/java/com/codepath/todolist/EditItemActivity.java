@@ -51,17 +51,23 @@ public class EditItemActivity extends ActionBarActivity {
 
     public void onSubmit(View view) {
         Intent data = new Intent();
-        TodoItemDatabase db = new TodoItemDatabase(this);
-        Item itName = new Item();
+        String newText;
 
-        itName = db.getItem(db.getItemId(myItem));
+        newText = editedItem.getText().toString();
 
-        myItem = editedItem.getText().toString();
+        if (newText != "") {
 
-        itName.setName(myItem);
+            TodoItemDatabase db = new TodoItemDatabase(this);
+            Item itName;  // = new Item();
+            itName = db.getItem(db.getItemId(myItem));
+            myItem = newText;
+            itName.setName(myItem);
 
-        db.updateItem(itName);
-        db.close();
+            db.updateItem(itName);
+            db.close();
+
+        }
+
         // pass data back
         data.putExtra("item", myItem);
         setResult(RESULT_OK, data);

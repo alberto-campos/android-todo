@@ -63,6 +63,8 @@ public class TodoItemDatabase extends SQLiteOpenHelper {
 
     private static final String[] COLUMNS = {KEY_ID,KEY_NAME,KEY_STATUS,KEY_DUE,KEY_CAT};
 
+    private static final String[] COLUMN_STATUS = {KEY_STATUS};
+
     public void addItem(Item item){
         Log.d("addItem", item.toString());
 
@@ -103,6 +105,29 @@ public class TodoItemDatabase extends SQLiteOpenHelper {
         return (Integer.parseInt(cursor.getString(0)));
 
     }
+
+    public int getItemStatus(String name) {
+        // 1. get reference to readable DB
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // 2. build query
+        Cursor cursor =
+                db.query(TABLE_ITEMS, // a. table
+                        COLUMN_STATUS, // b. column names
+                        " name = ?", // c. selections
+                        new String[] { String.valueOf(name) }, // d. selections args
+                        null, // e. group by
+                        null, // f. having
+                        null, // g. order by
+                        null); // h. limit
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        return (Integer.parseInt(cursor.getString(0)));
+
+    }
+
     public Item getItem(int id){
 
         // 1. get reference to readable DB
@@ -202,16 +227,18 @@ public class TodoItemDatabase extends SQLiteOpenHelper {
     // Updating single item
     public int updateItem(Item item) {
 
-        // 1. get reference to writable DB
-        SQLiteDatabase db = this.getWritableDatabase();
+        int i = 0;
 
-        // 2. create ContentValues to add key "column"/value
-        ContentValues values = new ContentValues();
-        values.put("status", item.getStatus()); // reset status to ACTIVE
-        values.put("name", item.getName()); // update item name
-        int i;
-        // 3.1 update by ID
-       // if (item.getId() > 0) {
+        if (item.getName() != "") {
+            // 1. get reference to writable DB
+            SQLiteDatabase db = this.getWritableDatabase();
+
+            // 2. create ContentValues to add key "column"/value
+            ContentValues values = new ContentValues();
+            values.put("status", item.getStatus()); // reset status to ACTIVE
+            values.put("name", item.getName()); // update item name
+            // 3.1 update by ID
+            // if (item.getId() > 0) {
             i = db.update(TABLE_ITEMS, //table
                     values, // column/value
                     KEY_ID + " = ?", // selections
@@ -224,7 +251,9 @@ public class TodoItemDatabase extends SQLiteOpenHelper {
 //                    KEY_NAME + " = ?",
 //                    new String[]{String.valueOf(item.getName())});
 //        }
-        db.close();
+            i = 1;
+            db.close();
+        }
         return i;
     }
 

@@ -57,6 +57,9 @@ public class ToDoList extends ActionBarActivity {
     private final int REQUEST_CODE = 1934;
     private int curPos;
     private int currentDue = Item.DEFAULT_TIMESTAMP;
+    private int curStatus;
+    private String curName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,35 +94,42 @@ public class ToDoList extends ActionBarActivity {
             View itemView = convertView;
 
 
-            final int pos = position;
+           // final int pos = position;
 
             if (itemView == null){
                 itemView = getLayoutInflater().inflate(R.layout.item_view, parent, false);
             }
 
             // find the item
-            Item currentItem = myItems.get(position);
-           // currentItem = getItem(position);
+            Item currentItem; // = myItems.get(position);
+            currentItem = getItem(position);
+           // curStatus = currentItem.getStatus();
+            curName = currentItem.getName();
 
             // fill the view
             final TextView myTask = (TextView) itemView.findViewById(R.id.item_tvDescription);
             final TextView myDue = (TextView) itemView.findViewById(R.id.item_tvDue);
             final ImageView myStatus = (ImageView) itemView.findViewById(R.id.item_ivStatus);
 
-            final String s = currentItem.getName();
-
+            //final String s = currentItem.getName();
             final Item finalCurrentItem = currentItem;
 
             myStatus.setOnClickListener(new ImageView.OnClickListener() {
                @Override
                public void onClick(View v) {
-                   // String s;
-                  // s = finalCurrentItem.getName();
-                   int st = finalCurrentItem.getStatus();
-                  // Toast.makeText(ToDoList.this, "Editing: "+ s, Toast.LENGTH_SHORT).show();
-                   flipDBStatus(s, st);
+                   String s;
+                   s = finalCurrentItem.getName();
+                //   int st = finalCurrentItem.getStatus();
+                 //  curStatus = 1;
 
-                   if (st == 1){ // Task was changed to done, set it to inactive
+                   curName = s;
+                //   curStatus = st;
+
+                   curStatus = getDBItemStatus(curName);
+                   Toast.makeText(ToDoList.this, "Editing: "+ curStatus, Toast.LENGTH_SHORT).show();
+                   flipDBStatus(curName, curStatus);
+
+                   if (curStatus == 1){ // Task was inverted to done, set it to inactive
                        myStatus.setImageResource(R.drawable.abc_btn_check_to_on_mtrl_015);
                        myTask.setPaintFlags(myTask.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                        myDue.setPaintFlags(myDue.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -132,7 +142,9 @@ public class ToDoList extends ActionBarActivity {
                }
            } );
 
-            if (currentItem.getStatus() == 0){  // Task IS done, show it as such.
+            curStatus = getDBItemStatus(curName);
+
+            if (curStatus == 0){  // Task IS done, show it as such.
                 myStatus.setImageResource(R.drawable.abc_btn_check_to_on_mtrl_015);
                 myTask.setPaintFlags(myTask.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 myDue.setPaintFlags(myDue.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -148,6 +160,7 @@ public class ToDoList extends ActionBarActivity {
             return itemView;
         }
     }
+
 
     private void setupListViewListener() {
         lvItems.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -292,6 +305,11 @@ public class ToDoList extends ActionBarActivity {
         return db.getItemId(name);
     }
 
+    private int getDBItemStatus(String name) {
+        TodoItemDatabase db = new TodoItemDatabase(this);
+        return db.getItemStatus(name);
+    }
+
     public void onAddDueDate(final View view) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -318,10 +336,10 @@ public class ToDoList extends ActionBarActivity {
     }
 
 
-    public void onImgClick(View view) {
-        Toast.makeText(getApplicationContext(), "You clicked!", Toast.LENGTH_SHORT).show();
-
-
-    }
+//    public void onImgClick(View view) {
+//        Toast.makeText(getApplicationContext(), "You clicked!", Toast.LENGTH_SHORT).show();
+//
+//
+//    }
 
 }
