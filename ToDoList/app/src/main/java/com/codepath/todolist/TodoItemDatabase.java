@@ -11,9 +11,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by acampos on 8/2/15.
- */
 public class TodoItemDatabase extends SQLiteOpenHelper {
     // Database Version
     private static final int DATABASE_VERSION = 6;
@@ -287,22 +284,11 @@ public class TodoItemDatabase extends SQLiteOpenHelper {
     // Deleting single item
     public void deleteItem(Item item) {
 
-        // 1. get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
 
-        // 2.1 Delete by ID
-//        if (item.getId() > 0) {
-//            db.delete(TABLE_ITEMS,
-//                    KEY_ID + " = ?",
-//                    new String[]{String.valueOf(item.getId())});
-//        }
-//        else {
-            // 2.2 delete by Name
         db.delete(TABLE_ITEMS,
                 KEY_NAME + " = ?",
                 new String[]{String.valueOf(item.getName())});
- //       }
-
         db.close();
     }
 

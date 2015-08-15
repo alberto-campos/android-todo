@@ -20,6 +20,8 @@ public class EditItemActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_item);
+        setTitle("Editing item");
+
         myItem = getIntent().getStringExtra("item");
 
         editedItem = (EditText) findViewById(R.id.etModifyItem);
